@@ -1,6 +1,4 @@
-function mod(a, b) {
-	return a >= 0 ? a % b : b - (-a % b);
-}
+import { mod } from "./utils.js";
 
 class CaesarCipher {
 	encrypt(plainText, key) {
@@ -32,12 +30,4 @@ class CaesarCipher {
 	}
 }
 
-let plainText = "hello".toUpperCase();
-let key = 3;
-
-const cs = new CaesarCipher();
-const cipherText = cs.encrypt(plainText, key);
-const decryptedText = cs.decrypt(cipherText, key);
-
-console.log("Cipher:", cipherText);
-console.log("Decipher:", decryptedText);
+export const caesarCipher = new CaesarCipher();
