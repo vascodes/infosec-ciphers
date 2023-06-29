@@ -1,6 +1,9 @@
-import { caesarCipher, playfairCipher } from "./scripts/ciphers.js";
+import { CaesarCipher, PlayfairCipher } from "./scripts/ciphers.js";
 
 const res = document.getElementById("res");
+
+const caesarCipher = new CaesarCipher();
+const playfairCipher = new PlayfairCipher();
 
 let plainText = "hello".toUpperCase();
 let key = 3;
@@ -15,4 +18,4 @@ res.innerHTML += `Caesar Decrypted Text: ${decryptedText} <br />`;
 console.log("Cipher:", cipherText);
 console.log("Decipher:", decryptedText);
 
-cipherText = playfairCipher.encrypt("HELLO", "MONARCHY");
+cipherText = playfairCipher.encrypt("BALLOON", "MONARCHY");
