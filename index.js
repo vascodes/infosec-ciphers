@@ -18,4 +18,4 @@ res.innerHTML += `Caesar Decrypted Text: ${decryptedText} <br />`;
 console.log("Cipher:", cipherText);
 console.log("Decipher:", decryptedText);
 
-cipherText = playfairCipher.encrypt("BALLOON", "MONARCHY");
+cipherText = playfairCipher.encrypt("JAZZ ", "MONARCHY");

@@ -121,7 +121,40 @@ export class PlayfairCipher {
 		return this.#playfairSquare;
 	}
 
+	// TODO: Fix plaintext generation bug when JAZZ is the plaintext.
 	encrypt(plainText, key) {
+		console.log("Original plaintext: ", plainText);
+
+		plainText = plainText.toUpperCase();
+
+		// Remove non alphabetic characters in plaintext.
+		plainText = plainText.replace(/[\s\d\W]+/gi, "");
+
+		// plainText = [...new Set(plainText)].join("");
+
+		// Append filler character to a plainText of odd length.
+		plainText += plainText.length % 2 != 0 ? this.fillerChar : "";
+
+		console.log(plainText);
+
+		// Generate digraphs.
+		const digraphs = [];
+		let i = 0;
+		while (i < plainText.length - 1) {
+			let firstChar = plainText[i],
+				secondChar = plainText[i + 1];
+
+			if (firstChar != secondChar) {
+				digraphs.push(firstChar + secondChar);
+			} else {
+				digraphs.push(firstChar + this.fillerChar);
+				i--;
+			}
+
+			i += 2;
+		}
+
+		console.log(digraphs);
 		this.#fillPlayfairSquare(key);
 	}
 
