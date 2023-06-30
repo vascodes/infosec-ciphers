@@ -31,8 +31,8 @@ export class CaesarCipher {
 }
 
 export class PlayfairCipher {
-	#keyTableSize = 5;
-	#keyTable = [];
+	#playfairSquareSize = 5;
+	#playfairSquare = [];
 
 	fillerChar;
 	replaceMap;
@@ -40,21 +40,21 @@ export class PlayfairCipher {
 	constructor(fillerChar = "X", replaceMap = { J: "I" }) {
 		this.fillerChar = fillerChar;
 		this.replaceMap = replaceMap;
-		this.#initKeyTable();
+		this.#initPlayfairSquare();
 	}
 
-	// Create a 5 x 5 empty grid (key table).
-	#initKeyTable() {
-		for (let i = 0; i < this.#keyTableSize; i++) {
-			this.#keyTable.push([]);
+	// Create a 5 x 5 empty grid (Playfair Square).
+	#initPlayfairSquare() {
+		for (let i = 0; i < this.#playfairSquareSize; i++) {
+			this.#playfairSquare.push([]);
 
-			for (let j = 0; j < this.#keyTableSize; j++) {
-				this.#keyTable[i][j] = "";
+			for (let j = 0; j < this.#playfairSquareSize; j++) {
+				this.#playfairSquare[i][j] = "";
 			}
 		}
 	}
 
-	#fillKeyTable(key) {
+	#fillPlayfairSquare(key) {
 		let charToReplace = Object.keys(this.replaceMap)[0];
 		let replacingChar = this.replaceMap[charToReplace];
 
@@ -74,13 +74,13 @@ export class PlayfairCipher {
 
 		console.log("Key: ", newKey);
 
-		// Insert all characters of given key to keyTable.
+		// Insert all characters of given key to Playfair Square.
 		let strPos = 0;
 		let row = 0,
 			col = 0;
-		while (row < this.#keyTableSize && strPos < newKey.length) {
-			for (col = 0; col < this.#keyTableSize && strPos < newKey.length; col++) {
-				this.#keyTable[row][col] = newKey[strPos];
+		while (row < this.#playfairSquareSize && strPos < newKey.length) {
+			for (col = 0; col < this.#playfairSquareSize && strPos < newKey.length; col++) {
+				this.#playfairSquare[row][col] = newKey[strPos];
 				strPos++;
 			}
 
@@ -88,41 +88,41 @@ export class PlayfairCipher {
 		}
 
 		// To ensure that last row is not filled partially.
-		if (col < this.#keyTableSize && this.#keyTable[row - 1][col] === "") {
+		if (col < this.#playfairSquareSize && this.#playfairSquare[row - 1][col] === "") {
 			row--;
 		}
 
 		// ASCII code of uppercase Engilsh alphabets range from 65 to 90.
 		let charCode = 65;
 
-		// Insert other alphabets into key table.
-		while (row < this.#keyTableSize) {
-			for (col = 0; col < this.#keyTableSize && charCode <= 90; col++) {
-				// Prevent inserting replacing character (usually 'J') to the key table.
+		// Insert other alphabets into Playfair Square.
+		while (row < this.#playfairSquareSize) {
+			for (col = 0; col < this.#playfairSquareSize && charCode <= 90; col++) {
+				// Prevent inserting replacing character (usually 'J') to the Playfair Square.
 				if (charCode === replacingChar.charCodeAt(0)) charCode++;
 
 				let char = String.fromCharCode(charCode);
 
-				// Prevent inserting alphabets that are in the given key into the key table.
+				// Prevent inserting alphabets that are in the given key into the Playfair Square.
 				while (keyCharSet.has(char) || char === replacingChar) {
 					char = String.fromCharCode(++charCode);
 				}
 
-				// Insert other alphabets to the key table.
-				if (this.#keyTable[row][col] === "") {
-					this.#keyTable[row][col] = char;
+				// Insert other alphabets to the Playfair Square.
+				if (this.#playfairSquare[row][col] === "") {
+					this.#playfairSquare[row][col] = char;
 					charCode++;
 				}
 			}
 			row++;
 		}
 
-		console.log(this.#keyTable);
-		return this.#keyTable;
+		console.log(this.#playfairSquare);
+		return this.#playfairSquare;
 	}
 
 	encrypt(plainText, key) {
-		this.#fillKeyTable(key);
+		this.#fillPlayfairSquare(key);
 	}
 
 	decrypt(cipherText, key) {}
