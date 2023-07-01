@@ -98,17 +98,17 @@ export class PlayfairCipher {
 		// Insert other alphabets into Playfair Square.
 		while (row < this.#playfairSquareSize) {
 			for (col = 0; col < this.#playfairSquareSize && charCode <= 90; col++) {
-				// Prevent inserting replacing character (usually 'J') to the Playfair Square.
+				// Prevent the insertion of replacing character (usually 'J').				
 				if (charCode === replacingChar.charCodeAt(0)) charCode++;
 
 				let char = String.fromCharCode(charCode);
 
-				// Prevent inserting alphabets that are in the given key into the Playfair Square.
+				// Prevent the insertion of alphabets that are in the given key.			
 				while (keyCharSet.has(char) || char === replacingChar) {
 					char = String.fromCharCode(++charCode);
 				}
 
-				// Insert other alphabets to the Playfair Square.
+				// Insert other alphabets..
 				if (this.#playfairSquare[row][col] === "") {
 					this.#playfairSquare[row][col] = char;
 					charCode++;
@@ -120,28 +120,10 @@ export class PlayfairCipher {
 		console.log(this.#playfairSquare);
 		return this.#playfairSquare;
 	}
-			
-	encrypt(plainText, key) {
-		console.log("Original plaintext: ", plainText);
 
-		plainText = plainText.toUpperCase();
-
-		// Remove non alphabetic characters in plaintext.
-		plainText = plainText.replace(/[\s\d\W]+/gi, "");
-
-		// Generate digraphs.
-		/*
-			Expected input & outputs:
-				BALLOON -> BA LX LO ON
-				COMMUNICATE -> CO MX MU NI CA TE
-				BALLOONS -> BA LX LO ON SX
-				ACCESS -> AC CE SX SX
-				JAZZTY -> JA ZX ZT YX
-				JAZZ -> JA ZX ZX
-				CSS -> CS SX
-				AA -> AX AX
-		*/
+	#getDigraphs(plainText) {
 		const digraphs = [];
+		
 		for (let i = 0; i < plainText.length; i++) {
 			let firstChar = plainText[i],
 				secondChar = plainText[i + 1] || this.fillerChar;
@@ -155,7 +137,20 @@ export class PlayfairCipher {
 			}
 		}
 
+		return digraphs;
+	}
+
+	encrypt(plainText, key) {
+		console.log("Original plaintext: ", plainText);
+
+		plainText = plainText.toUpperCase();
+
+		// Remove non alphabetic characters in plaintext.
+		plainText = plainText.replace(/[\s\d\W]+/gi, "");
+			
+		const digraphs = this.#getDigraphs(plainText);
 		console.log(digraphs);
+
 		this.#fillPlayfairSquare(key);
 	}
 
