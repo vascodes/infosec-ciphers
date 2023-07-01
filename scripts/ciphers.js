@@ -33,7 +33,6 @@ export class CaesarCipher {
 export class PlayfairCipher {
 	#size = 5;
 	#playfairSquare = [];
-	#digraphs = [];
 
 	fillerChar;
 	charToReplace;
@@ -125,7 +124,7 @@ export class PlayfairCipher {
 		return this.#playfairSquare;
 	}
 
-	#setDigraphs(plainText) {
+	#getDigraphs(plainText) {
 		const digraphs = [];
 
 		for (let i = 0; i < plainText.length; i++) {
@@ -141,29 +140,22 @@ export class PlayfairCipher {
 			}
 		}
 
-		this.#digraphs = digraphs;
+		return digraphs;
 	}
 
 	encrypt(plainText, key) {
 		console.log("Original plaintext: ", plainText);
 
 		plainText = plainText.toUpperCase();
+		plainText = this.#replaceChars(plainText); // Eg: Replace 'J' with 'I'.
+		plainText = plainText.replace(/[\s\d\W]+/gi, ""); // Remove non alphabetic characters in plaintext.
 
-		// Remove non alphabetic characters in plaintext.
-		plainText = plainText.replace(/[\s\d\W]+/gi, "");
-
-		// Eg: Replace 'J' with 'I'.
-		plainText = this.#replaceChars(plainText);
-
-		this.#setDigraphs(plainText);
+		const digraphs = this.#getDigraphs(plainText);
 		this.#fillPlayfairSquare(key);
-
-		console.log(this.#digraphs);
-		console.log(this.#playfairSquare);
 
 		// Encryption.
 		const encryptedDigraphs = [];
-		for (let digraph of this.#digraphs) {
+		for (let digraph of digraphs) {
 			let firstChar = digraph[0],
 				secondChar = digraph[1];
 
@@ -171,7 +163,7 @@ export class PlayfairCipher {
 			let firstCharFound = false,
 				secondCharFound = false;
 			let firstCharPos = { row: null, col: null },
-				secondCharPos = { row: null, col: null };			
+				secondCharPos = { row: null, col: null };
 			for (let row = 0; row < this.#size; row++) {
 				for (let col = 0; col < this.#size; col++) {
 					if (this.#playfairSquare[row][col] === firstChar) {
@@ -187,7 +179,7 @@ export class PlayfairCipher {
 					// Both characters found.
 					if (firstCharFound && secondCharFound) break;
 				}
-			}			
+			}
 
 			let newFirstChar, newSecondChar;
 
@@ -226,7 +218,10 @@ export class PlayfairCipher {
 			encryptedDigraphs.push(newFirstChar + newSecondChar);
 		}
 
+		console.log(digraphs);
+		console.log(this.#playfairSquare);
 		console.log(encryptedDigraphs);
+
 		return encryptedDigraphs.join("");
 	}
 
