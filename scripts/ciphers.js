@@ -159,6 +159,45 @@ export class PlayfairCipher {
 		return charPos;
 	}
 
+	#getEncryptedDigraph(digraph) {
+		let firstChar = digraph[0],
+			secondChar = digraph[1];
+
+		// Search characters of digraph in Playfair square.
+		let firstCharPos = this.#getCharPositionInPlayfairSquare(firstChar);
+		let secondCharPos = this.#getCharPositionInPlayfairSquare(secondChar);
+
+		let encryptedFirstChar, encryptedSecondChar;
+
+		// Both characters in same column.
+		if (firstCharPos.col === secondCharPos.col) {
+			let newFirstRow, newSecondRow;
+			let col = firstCharPos.col;
+
+			newFirstRow = (firstCharPos.row + 1) % this.#size;
+			newSecondRow = (secondCharPos.row + 1) % this.#size;
+
+			encryptedFirstChar = this.#playfairSquare[newFirstRow][col];
+			encryptedSecondChar = this.#playfairSquare[newSecondRow][col];
+		} else if (firstCharPos.row === secondCharPos.row) {
+			// Both characters in same row.
+
+			let newFirstCol, newSecondCol;
+			let row = firstCharPos.row;
+
+			newFirstCol = (firstCharPos.col + 1) % this.#size;
+			newSecondCol = (secondCharPos.col + 1) % this.#size;
+
+			encryptedFirstChar = this.#playfairSquare[row][newFirstCol];
+			encryptedSecondChar = this.#playfairSquare[row][newSecondCol];
+		} else {
+			encryptedFirstChar = this.#playfairSquare[firstCharPos.row][secondCharPos.col];
+			encryptedSecondChar = this.#playfairSquare[secondCharPos.row][firstCharPos.col];
+		}
+
+		return encryptedFirstChar + encryptedSecondChar;
+	}
+
 	encrypt(plainText, key) {
 		console.log("Original plaintext: ", plainText);
 
@@ -172,48 +211,8 @@ export class PlayfairCipher {
 		// Encryption.
 		const encryptedDigraphs = [];
 		for (let digraph of digraphs) {
-			let firstChar = digraph[0],
-				secondChar = digraph[1];
-
-			// Search characters of digraph in Playfair square.						
-			let firstCharPos = this.#getCharPositionInPlayfairSquare(firstChar);
-			let secondCharPos = this.#getCharPositionInPlayfairSquare(secondChar);
-
-			let newFirstChar, newSecondChar;
-
-			// Both characters in same column.
-			if (firstCharPos.col === secondCharPos.col) {
-				let newFirstRow, newSecondRow;
-				let col = firstCharPos.col;
-
-				newFirstRow = (firstCharPos.row + 1) % this.#size;
-				newSecondRow = (secondCharPos.row + 1) % this.#size;
-
-				newFirstChar = this.#playfairSquare[newFirstRow][col];
-				newSecondChar = this.#playfairSquare[newSecondRow][col];
-			} else if (firstCharPos.row === secondCharPos.row) {
-				// Both characters in same row.
-
-				let newFirstCol, newSecondCol;
-				let row = firstCharPos.row;
-
-				newFirstCol = (firstCharPos.col + 1) % this.#size;
-				newSecondCol = (secondCharPos.col + 1) % this.#size;
-
-				newFirstChar = this.#playfairSquare[row][newFirstCol];
-				newSecondChar = this.#playfairSquare[row][newSecondCol];
-			} else {
-				let newFirstRow = firstCharPos.row,
-					newFirstCol = secondCharPos.col;
-
-				let newSecondRow = secondCharPos.row,
-					newSecondCol = firstCharPos.col;
-
-				newFirstChar = this.#playfairSquare[newFirstRow][newFirstCol];
-				newSecondChar = this.#playfairSquare[newSecondRow][newSecondCol];
-			}
-
-			encryptedDigraphs.push(newFirstChar + newSecondChar);
+			let encryptedDigraph = this.#getEncryptedDigraph(digraph);
+			encryptedDigraphs.push(encryptedDigraph);
 		}
 
 		console.log(digraphs);
