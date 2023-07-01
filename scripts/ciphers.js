@@ -143,6 +143,22 @@ export class PlayfairCipher {
 		return digraphs;
 	}
 
+	#getCharPositionInPlayfairSquare(char) {
+		const charPos = { row: null, col: null };
+
+		for (let row = 0; row < this.#size; row++) {
+			for (let col = 0; col < this.#size; col++) {
+				if (this.#playfairSquare[row][col] === char) {
+					charPos.row = row;
+					charPos.col = col;
+					break;
+				}
+			}
+		}
+
+		return charPos;
+	}
+
 	encrypt(plainText, key) {
 		console.log("Original plaintext: ", plainText);
 
@@ -159,27 +175,9 @@ export class PlayfairCipher {
 			let firstChar = digraph[0],
 				secondChar = digraph[1];
 
-			// Search characters of digraph in Playfair square.
-			let firstCharFound = false,
-				secondCharFound = false;
-			let firstCharPos = { row: null, col: null },
-				secondCharPos = { row: null, col: null };
-			for (let row = 0; row < this.#size; row++) {
-				for (let col = 0; col < this.#size; col++) {
-					if (this.#playfairSquare[row][col] === firstChar) {
-						firstCharPos.row = row;
-						firstCharPos.col = col;
-						firstCharFound = true;
-					} else if (this.#playfairSquare[row][col] === secondChar) {
-						secondCharPos.row = row;
-						secondCharPos.col = col;
-						secondCharFound = true;
-					}
-
-					// Both characters found.
-					if (firstCharFound && secondCharFound) break;
-				}
-			}
+			// Search characters of digraph in Playfair square.						
+			let firstCharPos = this.#getCharPositionInPlayfairSquare(firstChar);
+			let secondCharPos = this.#getCharPositionInPlayfairSquare(secondChar);
 
 			let newFirstChar, newSecondChar;
 
