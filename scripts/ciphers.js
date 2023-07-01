@@ -99,12 +99,12 @@ export class PlayfairCipher {
 		while (row < this.#playfairSquareSize) {
 			for (col = 0; col < this.#playfairSquareSize && charCode <= 90; col++) {
 				// Prevent the insertion of replacing character (usually 'J').				
-				if (charCode === replacingChar.charCodeAt(0)) charCode++;
+				if (charCode === charToReplace.charCodeAt(0)) charCode++;
 
 				let char = String.fromCharCode(charCode);
 
 				// Prevent the insertion of alphabets that are in the given key.			
-				while (keyCharSet.has(char) || char === replacingChar) {
+				while (keyCharSet.has(char) || char === charToReplace) {
 					char = String.fromCharCode(++charCode);
 				}
 
