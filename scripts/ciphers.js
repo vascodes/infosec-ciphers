@@ -120,8 +120,7 @@ export class PlayfairCipher {
 		console.log(this.#playfairSquare);
 		return this.#playfairSquare;
 	}
-
-	// TODO: Fix plaintext generation bug when JAZZ is the plaintext.
+			
 	encrypt(plainText, key) {
 		console.log("Original plaintext: ", plainText);
 
@@ -130,28 +129,30 @@ export class PlayfairCipher {
 		// Remove non alphabetic characters in plaintext.
 		plainText = plainText.replace(/[\s\d\W]+/gi, "");
 
-		// plainText = [...new Set(plainText)].join("");
-
-		// Append filler character to a plainText of odd length.
-		plainText += plainText.length % 2 != 0 ? this.fillerChar : "";
-
-		console.log(plainText);
-
 		// Generate digraphs.
+		/*
+			Expected input & outputs:
+				BALLOON -> BA LX LO ON
+				COMMUNICATE -> CO MX MU NI CA TE
+				BALLOONS -> BA LX LO ON SX
+				ACCESS -> AC CE SX SX
+				JAZZTY -> JA ZX ZT YX
+				JAZZ -> JA ZX ZX
+				CSS -> CS SX
+				AA -> AX AX
+		*/
 		const digraphs = [];
-		let i = 0;
-		while (i < plainText.length - 1) {
+		for (let i = 0; i < plainText.length; i++) {
 			let firstChar = plainText[i],
-				secondChar = plainText[i + 1];
+				secondChar = plainText[i + 1] || this.fillerChar;
 
-			if (firstChar != secondChar) {
-				digraphs.push(firstChar + secondChar);
-			} else {
+			// If both characters are the same, append filler character.
+			if (firstChar === secondChar) {
 				digraphs.push(firstChar + this.fillerChar);
-				i--;
+			} else {
+				digraphs.push(firstChar + secondChar);
+				i++;
 			}
-
-			i += 2;
 		}
 
 		console.log(digraphs);
