@@ -31,44 +31,49 @@ export class CaesarCipher {
 }
 
 export class PlayfairCipher {
-	#playfairSquareSize = 5;
+	#size = 5;
 	#playfairSquare = [];
+	#digraphs = [];
 
 	fillerChar;
-	replaceMap;
+	charToReplace;
+	replacingChar;
 
-	constructor(fillerChar = "X", replaceMap = { J: "I" }) {
+	constructor(fillerChar = "X", charToReplace = "J", replacingChar = "I") {
 		this.fillerChar = fillerChar;
-		this.replaceMap = replaceMap;
+		this.charToReplace = charToReplace;
+		this.replacingChar = replacingChar;
+
 		this.#initPlayfairSquare();
 	}
 
 	// Create a 5 x 5 empty grid (Playfair Square).
 	#initPlayfairSquare() {
-		for (let i = 0; i < this.#playfairSquareSize; i++) {
+		for (let i = 0; i < this.#size; i++) {
 			this.#playfairSquare.push([]);
 
-			for (let j = 0; j < this.#playfairSquareSize; j++) {
+			for (let j = 0; j < this.#size; j++) {
 				this.#playfairSquare[i][j] = "";
 			}
 		}
 	}
 
-	#fillPlayfairSquare(key) {
-		let charToReplace = Object.keys(this.replaceMap)[0];
-		let replacingChar = this.replaceMap[charToReplace];
+	#replaceChars(str) {
+		return str.replace(this.charToReplace, this.replacingChar);
+	}
 
+	#fillPlayfairSquare(key) {
 		console.log(
 			"filler: ",
 			this.fillerChar,
 			"\nCharacter to be replaced: ",
-			charToReplace,
+			this.charToReplace,
 			"\nReplacing Char: ",
-			replacingChar,
+			this.replacingChar,
 		);
 
 		let newKey = key.toUpperCase();
-		newKey = newKey.replace(charToReplace, replacingChar); // Eg: Replace 'J' in key with 'I'.
+		newKey = this.#replaceChars(newKey); // Eg: Replace 'J' in key with 'I'.
 		const keyCharSet = new Set(newKey); // Remove duplicate characters in key.
 		newKey = [...keyCharSet].join("");
 
@@ -78,8 +83,8 @@ export class PlayfairCipher {
 		let strPos = 0;
 		let row = 0,
 			col = 0;
-		while (row < this.#playfairSquareSize && strPos < newKey.length) {
-			for (col = 0; col < this.#playfairSquareSize && strPos < newKey.length; col++) {
+		while (row < this.#size && strPos < newKey.length) {
+			for (col = 0; col < this.#size && strPos < newKey.length; col++) {
 				this.#playfairSquare[row][col] = newKey[strPos];
 				strPos++;
 			}
@@ -88,7 +93,7 @@ export class PlayfairCipher {
 		}
 
 		// To ensure that last row is not filled partially.
-		if (col < this.#playfairSquareSize && this.#playfairSquare[row - 1][col] === "") {
+		if (col < this.#size && this.#playfairSquare[row - 1][col] === "") {
 			row--;
 		}
 
@@ -96,15 +101,15 @@ export class PlayfairCipher {
 		let charCode = 65;
 
 		// Insert other alphabets into Playfair Square.
-		while (row < this.#playfairSquareSize) {
-			for (col = 0; col < this.#playfairSquareSize && charCode <= 90; col++) {
-				// Prevent the insertion of replacing character (usually 'J').				
-				if (charCode === charToReplace.charCodeAt(0)) charCode++;
+		while (row < this.#size) {
+			for (col = 0; col < this.#size && charCode <= 90; col++) {
+				// Prevent the insertion of replacing character (usually 'J').
+				if (charCode === this.charToReplace.charCodeAt(0)) charCode++;
 
 				let char = String.fromCharCode(charCode);
 
-				// Prevent the insertion of alphabets that are in the given key.			
-				while (keyCharSet.has(char) || char === charToReplace) {
+				// Prevent the insertion of alphabets that are in the given key.
+				while (keyCharSet.has(char) || char === this.charToReplace) {
 					char = String.fromCharCode(++charCode);
 				}
 
@@ -117,13 +122,12 @@ export class PlayfairCipher {
 			row++;
 		}
 
-		console.log(this.#playfairSquare);
 		return this.#playfairSquare;
 	}
 
-	#getDigraphs(plainText) {
+	#setDigraphs(plainText) {
 		const digraphs = [];
-		
+
 		for (let i = 0; i < plainText.length; i++) {
 			let firstChar = plainText[i],
 				secondChar = plainText[i + 1] || this.fillerChar;
@@ -137,7 +141,7 @@ export class PlayfairCipher {
 			}
 		}
 
-		return digraphs;
+		this.#digraphs = digraphs;
 	}
 
 	encrypt(plainText, key) {
@@ -147,11 +151,83 @@ export class PlayfairCipher {
 
 		// Remove non alphabetic characters in plaintext.
 		plainText = plainText.replace(/[\s\d\W]+/gi, "");
-			
-		const digraphs = this.#getDigraphs(plainText);
-		console.log(digraphs);
 
+		// Eg: Replace 'J' with 'I'.
+		plainText = this.#replaceChars(plainText);
+
+		this.#setDigraphs(plainText);
 		this.#fillPlayfairSquare(key);
+
+		console.log(this.#digraphs);
+		console.log(this.#playfairSquare);
+
+		// Encryption.
+		const encryptedDigraphs = [];
+		for (let digraph of this.#digraphs) {
+			let firstChar = digraph[0],
+				secondChar = digraph[1];
+
+			// Search characters of digraph in Playfair square.
+			let firstCharFound = false,
+				secondCharFound = false;
+			let firstCharPos = { row: null, col: null },
+				secondCharPos = { row: null, col: null };			
+			for (let row = 0; row < this.#size; row++) {
+				for (let col = 0; col < this.#size; col++) {
+					if (this.#playfairSquare[row][col] === firstChar) {
+						firstCharPos.row = row;
+						firstCharPos.col = col;
+						firstCharFound = true;
+					} else if (this.#playfairSquare[row][col] === secondChar) {
+						secondCharPos.row = row;
+						secondCharPos.col = col;
+						secondCharFound = true;
+					}
+
+					// Both characters found.
+					if (firstCharFound && secondCharFound) break;
+				}
+			}			
+
+			let newFirstChar, newSecondChar;
+
+			// Both characters in same column.
+			if (firstCharPos.col === secondCharPos.col) {
+				let newFirstRow, newSecondRow;
+				let col = firstCharPos.col;
+
+				newFirstRow = (firstCharPos.row + 1) % this.#size;
+				newSecondRow = (secondCharPos.row + 1) % this.#size;
+
+				newFirstChar = this.#playfairSquare[newFirstRow][col];
+				newSecondChar = this.#playfairSquare[newSecondRow][col];
+			} else if (firstCharPos.row === secondCharPos.row) {
+				// Both characters in same row.
+
+				let newFirstCol, newSecondCol;
+				let row = firstCharPos.row;
+
+				newFirstCol = (firstCharPos.col + 1) % this.#size;
+				newSecondCol = (secondCharPos.col + 1) % this.#size;
+
+				newFirstChar = this.#playfairSquare[row][newFirstCol];
+				newSecondChar = this.#playfairSquare[row][newSecondCol];
+			} else {
+				let newFirstRow = firstCharPos.row,
+					newFirstCol = secondCharPos.col;
+
+				let newSecondRow = secondCharPos.row,
+					newSecondCol = firstCharPos.col;
+
+				newFirstChar = this.#playfairSquare[newFirstRow][newFirstCol];
+				newSecondChar = this.#playfairSquare[newSecondRow][newSecondCol];
+			}
+
+			encryptedDigraphs.push(newFirstChar + newSecondChar);
+		}
+
+		console.log(encryptedDigraphs);
+		return encryptedDigraphs.join("");
 	}
 
 	decrypt(cipherText, key) {}
