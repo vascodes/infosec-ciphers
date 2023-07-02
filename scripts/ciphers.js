@@ -46,6 +46,10 @@ export class PlayfairCipher {
 		this.#initPlayfairSquare();
 	}
 
+	#replaceChars(str) {
+		return str.replace(this.charToReplace, this.replacingChar);
+	}
+
 	// Create a 5 x 5 empty grid (Playfair Square).
 	#initPlayfairSquare() {
 		for (let i = 0; i < this.#size; i++) {
@@ -57,26 +61,11 @@ export class PlayfairCipher {
 		}
 	}
 
-	#replaceChars(str) {
-		return str.replace(this.charToReplace, this.replacingChar);
-	}
-
 	#fillPlayfairSquare(key) {
-		console.log(
-			"filler: ",
-			this.fillerChar,
-			"\nCharacter to be replaced: ",
-			this.charToReplace,
-			"\nReplacing Char: ",
-			this.replacingChar,
-		);
-
 		let newKey = key.toUpperCase();
 		newKey = this.#replaceChars(newKey); // Eg: Replace 'J' in key with 'I'.
 		const keyCharSet = new Set(newKey); // Remove duplicate characters in key.
 		newKey = [...keyCharSet].join("");
-
-		console.log("Key: ", newKey);
 
 		// Insert all characters of given key to Playfair Square.
 		let strPos = 0;
@@ -198,10 +187,11 @@ export class PlayfairCipher {
 		return newFirstChar + newSecondChar;
 	}
 
-	encrypt(plainText, key) {
-		console.log("Playfair cipher ENCRYPTION");
-		console.log("Original plaintext: ", plainText);
+	getPlayfairSquare() {
+		return this.#playfairSquare;
+	}
 
+	encrypt(plainText, key) {
 		plainText = plainText.toUpperCase();
 		plainText = this.#replaceChars(plainText); // Eg: Replace 'J' with 'I'.
 		plainText = plainText.replace(/[\s\d\W]+/gi, ""); // Remove non alphabetic characters in plaintext.
@@ -215,26 +205,16 @@ export class PlayfairCipher {
 			encryptedDigraphs.push(this.#getDigraphSubstitute({ digraph })),
 		);
 
-		console.log(digraphs);
-		console.log(this.#playfairSquare);
-		console.log(encryptedDigraphs);
-
 		return encryptedDigraphs.join("");
 	}
 
 	decrypt(cipherText, key) {
-		console.log("Playfair cipher DECRYPTION");
-		console.log("Original ciphertext: ", cipherText);
-
 		const digraphs = this.#getDigraphs(cipherText);
 
 		const decryptedDigraphs = [];
 		digraphs.forEach(digraph =>
 			decryptedDigraphs.push(this.#getDigraphSubstitute({ digraph, isDecrypt: true })),
 		);
-
-		console.log(digraphs);
-		console.log(decryptedDigraphs);
 
 		return decryptedDigraphs.join("");
 	}
