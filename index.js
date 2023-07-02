@@ -15,4 +15,7 @@ res.innerHTML = `Plain Text: ${plainText} <br />`;
 res.innerHTML += `Caesar Cipher Text: ${cipherText} <br />`;
 res.innerHTML += `Caesar Decrypted Text: ${decryptedText} <br />`;
 
-cipherText = playfairCipher.encrypt("INSTRUMENTS", "MONARCHY");
+plainText = "INSTRUMENTS";
+key = "MONARCHY";
+cipherText = playfairCipher.encrypt(plainText, key);
+decryptedText = playfairCipher.decrypt(cipherText, key);

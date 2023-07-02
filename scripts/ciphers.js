@@ -198,7 +198,47 @@ export class PlayfairCipher {
 		return encryptedFirstChar + encryptedSecondChar;
 	}
 
+	#getDecryptedDigraph(digraph) {
+		let firstChar = digraph[0],
+			secondChar = digraph[1];
+
+		// Search characters of digraph in Playfair square.
+		let firstCharPos = this.#getCharPositionInPlayfairSquare(firstChar);
+		let secondCharPos = this.#getCharPositionInPlayfairSquare(secondChar);
+
+		let decryptedFirstChar, decryptedSecondChar;
+
+		// Both characters in same column.
+		if (firstCharPos.col === secondCharPos.col) {
+			let newFirstRow, newSecondRow;
+			let col = firstCharPos.col;
+
+			newFirstRow = mod(firstCharPos.row - 1, this.#size);
+			newSecondRow = mod(secondCharPos.row - 1, this.#size);
+
+			decryptedFirstChar = this.#playfairSquare[newFirstRow][col];
+			decryptedSecondChar = this.#playfairSquare[newSecondRow][col];
+		} else if (firstCharPos.row === secondCharPos.row) {
+			// Both characters in same row.
+
+			let newFirstCol, newSecondCol;
+			let row = firstCharPos.row;
+
+			newFirstCol = mod(firstCharPos.col - 1, this.#size);
+			newSecondCol = mod(secondCharPos.col - 1, this.#size);
+
+			decryptedFirstChar = this.#playfairSquare[row][newFirstCol];
+			decryptedSecondChar = this.#playfairSquare[row][newSecondCol];
+		} else {
+			decryptedFirstChar = this.#playfairSquare[firstCharPos.row][secondCharPos.col];
+			decryptedSecondChar = this.#playfairSquare[secondCharPos.row][firstCharPos.col];
+		}
+
+		return decryptedFirstChar + decryptedSecondChar;
+	}
+
 	encrypt(plainText, key) {
+		console.log("Playfair cipher ENCRYPTION");
 		console.log("Original plaintext: ", plainText);
 
 		plainText = plainText.toUpperCase();
@@ -210,10 +250,7 @@ export class PlayfairCipher {
 
 		// Encryption.
 		const encryptedDigraphs = [];
-		for (let digraph of digraphs) {
-			let encryptedDigraph = this.#getEncryptedDigraph(digraph);
-			encryptedDigraphs.push(encryptedDigraph);
-		}
+		digraphs.forEach(digraph => encryptedDigraphs.push(this.#getEncryptedDigraph(digraph)));
 
 		console.log(digraphs);
 		console.log(this.#playfairSquare);
@@ -222,5 +259,18 @@ export class PlayfairCipher {
 		return encryptedDigraphs.join("");
 	}
 
-	decrypt(cipherText, key) {}
+	decrypt(cipherText, key) {
+		console.log("Playfair cipher DECRYPTION");
+		console.log("Original ciphertext: ", cipherText);
+
+		const digraphs = this.#getDigraphs(cipherText);
+
+		const decryptedDigraphs = [];
+		digraphs.forEach(digraph => decryptedDigraphs.push(this.#getDecryptedDigraph(digraph)));
+
+		console.log(digraphs);
+		console.log(decryptedDigraphs);
+
+		return decryptedDigraphs.join("");
+	}
 }
