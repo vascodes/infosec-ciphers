@@ -159,7 +159,8 @@ export class PlayfairCipher {
 		return charPos;
 	}
 
-	#getEncryptedDigraph(digraph) {
+	#getDigraphSubstitute({ digraph, isDecrypt = false }) {
+		let newFirstChar, newSecondChar;
 		let firstChar = digraph[0],
 			secondChar = digraph[1];
 
@@ -167,74 +168,34 @@ export class PlayfairCipher {
 		let firstCharPos = this.#getCharPositionInPlayfairSquare(firstChar);
 		let secondCharPos = this.#getCharPositionInPlayfairSquare(secondChar);
 
-		let encryptedFirstChar, encryptedSecondChar;
+		let sign = isDecrypt ? -1 : 1;
 
 		// Both characters in same column.
 		if (firstCharPos.col === secondCharPos.col) {
-			let newFirstRow, newSecondRow;
 			let col = firstCharPos.col;
+			let newFirstRow, newSecondRow;
 
-			newFirstRow = (firstCharPos.row + 1) % this.#size;
-			newSecondRow = (secondCharPos.row + 1) % this.#size;
+			newFirstRow = mod(firstCharPos.row + sign * 1, this.#size);
+			newSecondRow = mod(secondCharPos.row + sign * 1, this.#size);
 
-			encryptedFirstChar = this.#playfairSquare[newFirstRow][col];
-			encryptedSecondChar = this.#playfairSquare[newSecondRow][col];
+			newFirstChar = this.#playfairSquare[newFirstRow][col];
+			newSecondChar = this.#playfairSquare[newSecondRow][col];
 		} else if (firstCharPos.row === secondCharPos.row) {
 			// Both characters in same row.
-
-			let newFirstCol, newSecondCol;
 			let row = firstCharPos.row;
+			let newFirstCol, newSecondCol;
 
-			newFirstCol = (firstCharPos.col + 1) % this.#size;
-			newSecondCol = (secondCharPos.col + 1) % this.#size;
+			newFirstCol = mod(firstCharPos.col + sign * 1, this.#size);
+			newSecondCol = mod(secondCharPos.col + sign * 1, this.#size);
 
-			encryptedFirstChar = this.#playfairSquare[row][newFirstCol];
-			encryptedSecondChar = this.#playfairSquare[row][newSecondCol];
+			newFirstChar = this.#playfairSquare[row][newFirstCol];
+			newSecondChar = this.#playfairSquare[row][newSecondCol];
 		} else {
-			encryptedFirstChar = this.#playfairSquare[firstCharPos.row][secondCharPos.col];
-			encryptedSecondChar = this.#playfairSquare[secondCharPos.row][firstCharPos.col];
+			newFirstChar = this.#playfairSquare[firstCharPos.row][secondCharPos.col];
+			newSecondChar = this.#playfairSquare[secondCharPos.row][firstCharPos.col];
 		}
 
-		return encryptedFirstChar + encryptedSecondChar;
-	}
-
-	#getDecryptedDigraph(digraph) {
-		let firstChar = digraph[0],
-			secondChar = digraph[1];
-
-		// Search characters of digraph in Playfair square.
-		let firstCharPos = this.#getCharPositionInPlayfairSquare(firstChar);
-		let secondCharPos = this.#getCharPositionInPlayfairSquare(secondChar);
-
-		let decryptedFirstChar, decryptedSecondChar;
-
-		// Both characters in same column.
-		if (firstCharPos.col === secondCharPos.col) {
-			let newFirstRow, newSecondRow;
-			let col = firstCharPos.col;
-
-			newFirstRow = mod(firstCharPos.row - 1, this.#size);
-			newSecondRow = mod(secondCharPos.row - 1, this.#size);
-
-			decryptedFirstChar = this.#playfairSquare[newFirstRow][col];
-			decryptedSecondChar = this.#playfairSquare[newSecondRow][col];
-		} else if (firstCharPos.row === secondCharPos.row) {
-			// Both characters in same row.
-
-			let newFirstCol, newSecondCol;
-			let row = firstCharPos.row;
-
-			newFirstCol = mod(firstCharPos.col - 1, this.#size);
-			newSecondCol = mod(secondCharPos.col - 1, this.#size);
-
-			decryptedFirstChar = this.#playfairSquare[row][newFirstCol];
-			decryptedSecondChar = this.#playfairSquare[row][newSecondCol];
-		} else {
-			decryptedFirstChar = this.#playfairSquare[firstCharPos.row][secondCharPos.col];
-			decryptedSecondChar = this.#playfairSquare[secondCharPos.row][firstCharPos.col];
-		}
-
-		return decryptedFirstChar + decryptedSecondChar;
+		return newFirstChar + newSecondChar;
 	}
 
 	encrypt(plainText, key) {
@@ -250,7 +211,9 @@ export class PlayfairCipher {
 
 		// Encryption.
 		const encryptedDigraphs = [];
-		digraphs.forEach(digraph => encryptedDigraphs.push(this.#getEncryptedDigraph(digraph)));
+		digraphs.forEach(digraph =>
+			encryptedDigraphs.push(this.#getDigraphSubstitute({ digraph })),
+		);
 
 		console.log(digraphs);
 		console.log(this.#playfairSquare);
@@ -266,7 +229,9 @@ export class PlayfairCipher {
 		const digraphs = this.#getDigraphs(cipherText);
 
 		const decryptedDigraphs = [];
-		digraphs.forEach(digraph => decryptedDigraphs.push(this.#getDecryptedDigraph(digraph)));
+		digraphs.forEach(digraph =>
+			decryptedDigraphs.push(this.#getDigraphSubstitute({ digraph, isDecrypt: true })),
+		);
 
 		console.log(digraphs);
 		console.log(decryptedDigraphs);
