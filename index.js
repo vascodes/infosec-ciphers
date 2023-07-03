@@ -1,4 +1,4 @@
-import { CaesarCipher, PlayfairCipher } from "./scripts/ciphers.js";
+import { CaesarCipher, PlayfairCipher } from "./dist/ciphers.js";
 
 const res = document.getElementById("res");
 
