@@ -84,9 +84,8 @@ export class PlayfairCipher {
 		if (col < this.#size && this.#playfairSquare[row - 1][col] === "") {
 			row--;
 		}
-
-		// ASCII code of uppercase Engilsh alphabets range from 65 to 90.
-		let charCode = 65;
+		
+		let charCode = 65; // ASCII code of uppercase Engilsh alphabets range from 65 to 90.
 
 		// Insert other alphabets into Playfair Square.
 		while (row < this.#size) {
@@ -101,7 +100,7 @@ export class PlayfairCipher {
 					char = String.fromCharCode(++charCode);
 				}
 
-				// Insert other alphabets..
+				// Insert other alphabets.
 				if (this.#playfairSquare[row][col] === "") {
 					this.#playfairSquare[row][col] = char;
 					charCode++;
@@ -211,6 +210,7 @@ export class PlayfairCipher {
 	decrypt(cipherText, key) {
 		const digraphs = this.#getDigraphs(cipherText);
 
+		// Decryption.
 		const decryptedDigraphs = [];
 		digraphs.forEach(digraph =>
 			decryptedDigraphs.push(this.#getDigraphSubstitute({ digraph, isDecrypt: true })),
