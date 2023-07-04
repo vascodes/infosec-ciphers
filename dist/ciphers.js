@@ -1,6 +1,6 @@
 // Custom modules.
 import { mod } from "./utils.js";
-export class CaesarCipher {
+class CaesarCipher {
     encrypt(plainText, key) {
         const encrypted = [];
         for (let i = 0; i < plainText.length; i++) {
@@ -18,24 +18,47 @@ export class CaesarCipher {
         return decrypted.join("");
     }
 }
-export class PlayfairCipher {
-    constructor(fillerChar = "X", charToReplace = "J", replacingChar = "I") {
-        this.size = 5;
-        this.playfairSquare = [];
-        this.fillerChar = fillerChar;
-        this.charToReplace = charToReplace;
-        this.replacingChar = replacingChar;
+class PlayfairCipher {
+    constructor() {
+        this._fillerChar = "X";
+        this._charToReplace = "J";
+        this._replacingChar = "I";
+        this._size = 5;
+        this._playfairSquare = [];
         this.initPlayfairSquare();
     }
+    //#region Getters and Setters
+    get fillerChar() {
+        return this._fillerChar;
+    }
+    set fillerChar(x) {
+        this._fillerChar = x;
+    }
+    get charToReplace() {
+        return this._charToReplace;
+    }
+    set charToReplace(j) {
+        this._charToReplace = j;
+    }
+    get replacingChar() {
+        return this._replacingChar;
+    }
+    set replacingChar(i) {
+        this._replacingChar = i;
+    }
+    get playfairSquare() {
+        return this._playfairSquare;
+    }
+    //#endregion
     replaceChars(str) {
         return str.replace(this.charToReplace, this.replacingChar);
     }
     // Create a 5 x 5 empty grid (Playfair Square).
     initPlayfairSquare() {
-        for (let i = 0; i < this.size; i++) {
-            this.playfairSquare.push([]);
-            for (let j = 0; j < this.size; j++) {
-                this.playfairSquare[i][j] = "";
+        for (let i = 0; i < this._size; i++) {
+            this._playfairSquare.push([]);
+            for (let j = 0; j < this._size; j++) {
+                this._playfairSquare[i][j] = "";
             }
         }
     }
@@ -47,21 +70,21 @@ export class PlayfairCipher {
         // Insert all characters of given key to Playfair Square.
         let strPos = 0;
         let row = 0, col = 0;
-        while (row < this.size && strPos < newKey.length) {
-            for (col = 0; col < this.size && strPos < newKey.length; col++) {
-                this.playfairSquare[row][col] = newKey[strPos];
+        while (row < this._size && strPos < newKey.length) {
+            for (col = 0; col < this._size && strPos < newKey.length; col++) {
+                this._playfairSquare[row][col] = newKey[strPos];
                 strPos++;
             }
             row++;
         }
         // To ensure that last row is not filled partially.
-        if (col < this.size && this.playfairSquare[row - 1][col] === "") {
+        if (col < this._size && this._playfairSquare[row - 1][col] === "") {
             row--;
         }
         let charCode = 65; // ASCII code of uppercase Engilsh alphabets range from 65 to 90.
         // Insert other alphabets into Playfair Square.
-        while (row < this.size) {
-            for (col = 0; col < this.size && charCode <= 90; col++) {
+        while (row < this._size) {
+            for (col = 0; col < this._size && charCode <= 90; col++) {
                 // Prevent the insertion of replacing character (usually 'J').
                 if (charCode === this.charToReplace.charCodeAt(0))
                     charCode++;
@@ -71,14 +94,14 @@ export class PlayfairCipher {
                     char = String.fromCharCode(++charCode);
                 }
                 // Insert other alphabets.
-                if (this.playfairSquare[row][col] === "") {
-                    this.playfairSquare[row][col] = char;
+                if (this._playfairSquare[row][col] === "") {
+                    this._playfairSquare[row][col] = char;
                     charCode++;
                 }
             }
             row++;
         }
-        return this.playfairSquare;
+        return this._playfairSquare;
     }
     getDigraphs(plainText) {
         const digraphs = [];
@@ -97,9 +120,9 @@ export class PlayfairCipher {
     }
     getCharPositionInPlayfairSquare(char) {
         const charPos = { row: 0, col: 0 };
-        for (let row = 0; row < this.size; row++) {
-            for (let col = 0; col < this.size; col++) {
-                if (this.playfairSquare[row][col] === char) {
+        for (let row = 0; row < this._size; row++) {
+            for (let col = 0; col < this._size; col++) {
+                if (this._playfairSquare[row][col] === char) {
                     charPos.row = row;
                     charPos.col = col;
                     break;
@@ -119,28 +142,25 @@ export class PlayfairCipher {
         if (firstCharPos.col === secondCharPos.col) {
             let col = firstCharPos.col;
             let newFirstRow, newSecondRow;
-            newFirstRow = mod(firstCharPos.row + sign * 1, this.size);
-            newSecondRow = mod(secondCharPos.row + sign * 1, this.size);
-            newFirstChar = this.playfairSquare[newFirstRow][col];
-            newSecondChar = this.playfairSquare[newSecondRow][col];
+            newFirstRow = mod(firstCharPos.row + sign * 1, this._size);
+            newSecondRow = mod(secondCharPos.row + sign * 1, this._size);
+            newFirstChar = this._playfairSquare[newFirstRow][col];
+            newSecondChar = this._playfairSquare[newSecondRow][col];
         }
         else if (firstCharPos.row === secondCharPos.row) {
             // Both characters in same row.
             let row = firstCharPos.row;
             let newFirstCol, newSecondCol;
-            newFirstCol = mod(firstCharPos.col + sign * 1, this.size);
-            newSecondCol = mod(secondCharPos.col + sign * 1, this.size);
-            newFirstChar = this.playfairSquare[row][newFirstCol];
-            newSecondChar = this.playfairSquare[row][newSecondCol];
+            newFirstCol = mod(firstCharPos.col + sign * 1, this._size);
+            newSecondCol = mod(secondCharPos.col + sign * 1, this._size);
+            newFirstChar = this._playfairSquare[row][newFirstCol];
+            newSecondChar = this._playfairSquare[row][newSecondCol];
         }
         else {
-            newFirstChar = this.playfairSquare[firstCharPos.row][secondCharPos.col];
-            newSecondChar = this.playfairSquare[secondCharPos.row][firstCharPos.col];
+            newFirstChar = this._playfairSquare[firstCharPos.row][secondCharPos.col];
+            newSecondChar = this._playfairSquare[secondCharPos.row][firstCharPos.col];
         }
         return newFirstChar + newSecondChar;
-    }
-    getPlayfairSquare() {
-        return this.playfairSquare;
     }
     encrypt(plainText, key) {
         plainText = plainText.toUpperCase();
@@ -155,9 +175,12 @@ export class PlayfairCipher {
     }
     decrypt(cipherText, key) {
         const digraphs = this.getDigraphs(cipherText);
+        this.fillPlayfairSquare(key);
         // Decryption.
         const decryptedDigraphs = [];
         digraphs.forEach(digraph => decryptedDigraphs.push(this.getDigraphSubstitute(digraph, true)));
         return decryptedDigraphs.join("");
     }
 }
+export const caesarCipher = new CaesarCipher();
+export const playfairCipher = new PlayfairCipher();

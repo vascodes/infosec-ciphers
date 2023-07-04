@@ -1,8 +1,8 @@
-import { CaesarCipher, PlayfairCipher } from "./dist/ciphers.js";
+import { caesarCipher, playfairCipher } from "./dist/ciphers.js";
 
 const res = document.getElementById("res");
 
-const caesarCipher = new CaesarCipher();
+// Caesar Cipher.
 let plainText = "hello".toUpperCase();
 let key = 3;
 let cipherText = caesarCipher.encrypt(plainText, key);
@@ -14,11 +14,11 @@ res.innerHTML += `Key: ${key} <br />`;
 res.innerHTML += `Caesar Cipher Text: ${cipherText} <br />`;
 res.innerHTML += `Caesar Decrypted Text: ${decryptedText} <br />`;
 
-const playfairCipher = new PlayfairCipher();
+// Playfair cipher.
 plainText = "INSTRUMENTS";
 key = "MONARCHY";
 cipherText = playfairCipher.encrypt(plainText, key);
-const playfairSquare = playfairCipher.getPlayfairSquare();
+const playfairSquare = playfairCipher.playfairSquare;
 decryptedText = playfairCipher.decrypt(cipherText, key);
 
 res.innerHTML += `<br /> Playfair Cipher <br />`;
