@@ -1,13 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InfoSec - Ciphers</title>
-    <script type="module" src="index.js"></script> 
+    <script type="module" src="index.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Ciphers</h1>
+    <h1>CIPHERS</h1>
+    <h3>Caesar Cipher</h3>
+    <div id="caesar-cipher-container">
+        <div class="encode">
+            <label for="caesar-plaintext">Plaintext</label>
+            <input type="text" name="plaintext" id="caesar-plaintext">
+
+            <label for="caesar-key">Key</label>
+            <input type="number" name="key" id="caesar-key">
+           
+            <a href="#" id="btn-caesar-encrypt" class="btn-cyberpunk">ENCRYPT</a>
+        </div>
+
+        <br>
+
+        <div class="decode">
+            <label for="caesar-ciphertext">Ciphertext</label>
+            <input type="text" name="plaintext" id="caesar-ciphertext">
+
+            <label for="caesar-key">Key</label>
+            <input type="number" name="key" id="caesar-key">
+            
+            <a href="#" id="btn-caesar-decrypt" class="btn-cyberpunk">DECRYPT</a>
+        </div>
+    </div>
+
     <p id="res"></p>
 </body>
+
 </html>

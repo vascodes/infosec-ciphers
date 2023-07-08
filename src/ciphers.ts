@@ -10,7 +10,7 @@ class CaesarCipher implements ICipher {
 
 		for (let i = 0; i < plainText.length; i++) {
 			let charCode: number = plainText.charCodeAt(i),
-				shiftedCharCode: number = mod(charCode - 65 + key, 26) + 65,
+				shiftedCharCode: number = mod(charCode - 65 + key, 26) + 65,//ZYJJMML
 				encryptedChar: string = String.fromCharCode(shiftedCharCode);
 
 			encrypted.push(encryptedChar);
