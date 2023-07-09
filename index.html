@@ -10,33 +10,67 @@
 </head>
 
 <body>
-    <h1>CIPHERS</h1>
-    <h3>Caesar Cipher</h3>
-    <div id="caesar-cipher-container">
-        <div class="encode">
-            <label for="caesar-plaintext">Plaintext</label>
-            <input type="text" name="plaintext" id="caesar-plaintext">
+    <div class="container">
+        <!-- NAVBAR -->
+        <nav id="main-nav">
+            <ul class="nav-ul">
+                <div class="nav-logo-container">
+                    <p id="nav-logo">CIPHERS</p>
+                </div>
+                <div class="nav-li-container">
+                    <li class="nav-li">Caesar Cipher</li>
+                    <li class="nav-li">Playfair Cipher</li>
+                </div>
+            </ul>
+        </nav>
 
-            <label for="caesar-key">Key</label>
-            <input type="number" name="key" id="caesar-key">
-           
-            <a href="#" id="btn-caesar-encrypt" class="btn-cyberpunk">ENCRYPT</a>
-        </div>
+        <main>
+            <h1 class="main-heading">Caesar Cipher</h1>
 
-        <br>
+            <section id="section-encryption" class="cyberpunk-box">
+                <h2 class="section-heading">Encryption</h2>
+                <div class="flex-col-2">
+                    <div class="input-group">
+                        <label for="caesar-plaintext">Plaintext</label>
+                        <textarea name="plaintext" id="caesar-plaintext" class="textarea-input"></textarea>
+                    </div>
 
-        <div class="decode">
-            <label for="caesar-ciphertext">Ciphertext</label>
-            <input type="text" name="plaintext" id="caesar-ciphertext">
+                    <div class="input-group">
+                        <label for="caesar-key">Key</label>
+                        <input type="number" class="txt-number" name="key" id="caesar-key">
+                        <a href="#" id="btn-caesar-encrypt" class="btn-cyberpunk">ENCRYPT</a>
+                    </div>
 
-            <label for="caesar-key">Key</label>
-            <input type="number" name="key" id="caesar-key">
-            
-            <a href="#" id="btn-caesar-decrypt" class="btn-cyberpunk">DECRYPT</a>
-        </div>
+                </div>
+            </section>
+
+            <!-- <div id="caesar-cipher-container">
+                <div class="encode">
+                    <label for="caesar-plaintext">Plaintext</label>
+                    <input type="text" name="plaintext" id="caesar-plaintext">
+
+                    <label for="caesar-key">Key</label>
+                    <input type="number" name="key" id="caesar-key">
+
+                    <a href="#" id="btn-caesar-encrypt" class="btn-cyberpunk">ENCRYPT</a>
+                </div>
+
+                <br>
+
+                <div class="decode">
+                    <label for="caesar-ciphertext">Ciphertext</label>
+                    <input type="text" name="plaintext" id="caesar-ciphertext">
+
+                    <label for="caesar-key">Key</label>
+                    <input type="number" name="key" id="caesar-key">
+
+                    <a href="#" id="btn-caesar-decrypt" class="btn-cyberpunk">DECRYPT</a>
+                </div>
+            </div> -->
+
+            <p id="res"></p>
+        </main>
     </div>
-
-    <p id="res"></p>
 </body>
 
 </html>
