@@ -1,10 +1,20 @@
 // Custom modules.
 import { mod } from "./utils.js";
 class CaesarCipher {
+    constructor() {
+        this.alphabets = [
+            'A', 'B', 'C', 'D', 'E', 'F',
+            'G', 'H', 'I', 'J', 'K', 'L',
+            'M', 'N', 'O', 'P', 'Q', 'R',
+            'S', 'T', 'U', 'V', 'W', 'X',
+            'Y', 'Z'
+        ];
+    }
     encrypt(plainText, key) {
         const encrypted = [];
         for (let i = 0; i < plainText.length; i++) {
-            let charCode = plainText.charCodeAt(i), shiftedCharCode = mod(charCode - 65 + key, 26) + 65, encryptedChar = String.fromCharCode(shiftedCharCode);
+            let charPos = this.alphabets.indexOf(plainText[i]), shiftedPos = mod(charPos + key, 26);
+            let encryptedChar = this.alphabets[shiftedPos];
             encrypted.push(encryptedChar);
         }
         return encrypted.join("");
@@ -12,7 +22,8 @@ class CaesarCipher {
     decrypt(cipherText, key) {
         const decrypted = [];
         for (let i = 0; i < cipherText.length; i++) {
-            let charCode = cipherText.charCodeAt(i), shiftedCharCode = mod(charCode - 65 - key, 26) + 65, decryptedChar = String.fromCharCode(shiftedCharCode);
+            let charPos = this.alphabets.indexOf(cipherText[i]), shiftedPos = mod(charPos - key, 26);
+            let decryptedChar = this.alphabets[shiftedPos];
             decrypted.push(decryptedChar);
         }
         return decrypted.join("");

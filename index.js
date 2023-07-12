@@ -1,44 +1,37 @@
 import { caesarCipher, playfairCipher } from "./dist/ciphers.js";
 
-const caesarPlainText = document.getElementById("caesar-plaintext");
-const caesarKey = document.getElementById("caesar-key");
-const btnCaesarEncrypt = document.getElementById("btn-caesar-encrypt");
-const btnCaesarDecrypt = document.getElementById("btn-caesar-decrypt");
-const res = document.getElementById("res");
+const caesarPlainText = document.getElementById("caesar-plaintext"),
+    caesarCipherText = document.getElementById("caesar-ciphertext"),
+    caesarEncryptKey = document.getElementById("caesar-encrypt-key"),
+    caesarDecryptKey = document.getElementById("caesar-decrypt-key"),
+    btnCaesarEncrypt = document.getElementById("btn-caesar-encrypt"),
+    btnCaesarDecrypt = document.getElementById("btn-caesar-decrypt"),
+    resultSection = document.getElementById("section-result"),
+    resultTitle = document.getElementById("result-title"),
+    result = document.getElementById("result");
 
-let plainText = "",
-    key = "",
-    cipherText = "";
-
-caesarPlainText.addEventListener("change", () => (plainText = caesarPlainText.value.toUpperCase()));
-
-caesarKey.addEventListener("change", () => (key = Number(caesarKey.value)));
+resultSection.style.display = "none";
 
 btnCaesarEncrypt.addEventListener("click", () => {
-    console.log(plainText);
-    console.log(key);
+    let plainText = caesarPlainText.value.toUpperCase().replaceAll(" ", ""),
+        key = Number(caesarEncryptKey.value);
 
-    // Caesar Cipher.    
-    cipherText = caesarCipher.encrypt(plainText, key);
+    let cipherText = caesarCipher.encrypt(plainText, key);
 
-    res.innerHTML = "";
-    res.innerHTML = `Caesar Cipher <br />`;
-    res.innerHTML += `Plain Text: ${plainText} <br />`;
-    res.innerHTML += `Key: ${key} <br />`;
-    res.innerHTML += `Caesar Cipher Text: ${cipherText} <br />`;
+    resultSection.style.display = "block";
+    resultTitle.textContent = "Your Ciphertext:";
+    result.innerHTML = cipherText;
 });
 
 btnCaesarDecrypt.addEventListener("click", () => {
-    console.log(plainText);
-    console.log(key);
+    let cipherText = caesarCipherText.value.toUpperCase().replaceAll(" ", ""),
+        key = Number(caesarDecryptKey.value);
 
-    // Caesar Cipher.        
     let decryptedText = caesarCipher.decrypt(cipherText, key);
 
-    res.innerHTML = "";
-    res.innerHTML = `Caesar Cipher <br />`;
-    res.innerHTML += `Caesar Cipher Text: ${cipherText} <br />`;
-    res.innerHTML += `Caesar Decrypted Text: ${decryptedText} <br />`;
+    resultSection.style.display = "block";
+    resultTitle.textContent = "Your Plaintext:";
+    result.innerHTML = decryptedText;
 });
 
 /*

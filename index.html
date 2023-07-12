@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="mx-lg-5">
 
     <div class="container p-0">
         <!-- NAVBAR -->
@@ -38,11 +38,12 @@
             </div>
         </nav>
     </div>
-    
+
     <div class="container">
         <main>
             <h1 class="display-5 text-uppercase">Caesar Cipher</h1>
 
+            <!-- ABOUT TEXT -->
             <p id="about-text" class="lead mt-4">
                 A type of substitution cipher in which each letter in the plaintext is replaced by a
                 letter some fixed number of positions down the alphabet. For example, with a left shift of 3, D would be
@@ -50,51 +51,73 @@
                 private correspondence.
             </p>
 
-            <!-- ENCRYPTION SECTION -->
-            <section id="section-encryption" class="mt-5 px-5 py-4 border border-warning-subtle">
-                <h2 class="text-uppercase mb-5">Encryption</h2>
+            <!-- ENCRYPT / DECRYPT TABS -->
+            <nav class="mt-5" data-bs-theme="dark">
+                <div class="nav nav-tabs rounded-0" id="nav-tab" role="tablist">
+                    <button class="nav-link text-uppercase text-white active" id="nav-home-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                        aria-selected="true">Encryption</button>
+                    <button class="nav-link text-uppercase text-white" id="nav-profile-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                        aria-selected="false">Decryption</button>
+                </div>
+            </nav>
 
-                <div class="mb-4">
-                    <label for="caesar-plaintext" class="form-label">Plaintext</label>
-                    <textarea name="plaintext"
-                        class="form-control bg-transparent text-white border-warning-subtle rounded-0 textarea-input"
-                        id="caesar-plaintext"></textarea>
+            <!-- ENCRYPT / DECRYPT TAB CONTENT -->
+            <div class="tab-content p-4" id="nav-tabContent">
+                <!-- ENCRYPTION CONTENT -->
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+                    tabindex="0">
+                    <div class="container-lg px-lg-5">
+                        <div class="mb-4">
+                            <label for="caesar-plaintext" class="form-label p-0">Plaintext</label>
+                            <textarea name="plaintext"
+                                class="form-control bg-transparent text-white border-warning-subtle rounded-0 textarea-input"
+                                id="caesar-plaintext"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="caesar-encrypt-key" class="form-label p-0">Key</label>
+                            <input type="number"
+                                class="form-control bg-transparent text-white border-warning-subtle rounded-0"
+                                id="caesar-encrypt-key">
+                        </div>
+                    </div>
+
+                    <div class="mt-2 d-flex justify-content-center">
+                        <a href="#section-result" id="btn-caesar-encrypt" class="btn-cyberpunk mt-4">ENCRYPT</a>
+                    </div>
                 </div>
 
-                <div class="mb-4 row">
-                    <div class="col-md-4">
-                        <label for="caesar-key" class="form-label">Key</label>
-                        <input type="number" class="form-control bg-transparent text-white border-warning-subtle rounded-0"
-                            id="caesar-key">
+                <!-- DECRYPTION CONTENT -->
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+                    tabindex="0">
+                    <div class="container-lg px-lg-5">
+                        <div class="mb-4">
+                            <label for="caesar-ciphertext" class="form-label p-0">Ciphertext</label>
+                            <textarea name="ciphertext"
+                                class="form-control bg-transparent text-white border-warning-subtle rounded-0 textarea-input"
+                                id="caesar-ciphertext"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="caesar-decrypt-key" class="form-label p-0">Key</label>
+                            <input type="number"
+                                class="form-control bg-transparent text-white border-warning-subtle rounded-0"
+                                id="caesar-decrypt-key">
+                        </div>
                     </div>
-                    <div class="col-md d-flex">
-                        <a href="#" id="btn-caesar-encrypt" class="btn-cyberpunk mt-4 align-self-end">ENCRYPT</a>
+
+                    <div class="mt-2 d-flex justify-content-center">
+                        <a href="#section-result" id="btn-caesar-decrypt" class="btn-cyberpunk mt-4">DECRYPT</a>
                     </div>
                 </div>
+            </div>
+
+            <section id="section-result" class="mt-4">
+                <h5 id="result-title" class="mb-4">Your ciphertext:</h5>
+                <div id="result" class="border p-4 border-warning-subtle"></div>
             </section>
-
-            <!-- DECRYPTION SECTION -->
-            <section id="section-decryption" class="mt-4 px-5 py-4 border border-warning-subtle">
-                <h2 class="text-uppercase mb-5">Decryption</h2>
-
-                <div class="mb-4">
-                    <label for="caesar-ciphertext" class="form-label">Ciphertext</label>
-                    <textarea name="ciphertext"
-                        class="form-control bg-transparent text-white border-warning-subtle rounded-0 textarea-input"
-                        id="caesar-ciphertext"></textarea>
-                </div>
-
-                <div class="mb-4 row">
-                    <div class="col-md-3">
-                        <label for="caesar-key" class="form-label">Key</label>
-                        <input type="number" class="form-control bg-transparent text-white border-warning-subtle rounded-0"
-                            id="caesar-key">
-                    </div>
-                    <div class="col-md-9 d-flex">
-                        <a href="#" id="btn-caesar-decrypt" class="btn-cyberpunk mt-4 align-self-end">DECRYPT</a>
-                    </div>
-                </div>
-            </section>           
 
             <p id="res"></p>
         </main>

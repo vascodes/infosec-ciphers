@@ -5,14 +5,22 @@ import { CharacterPosition, ICipher } from "./types.js";
 import { mod } from "./utils.js";
 
 class CaesarCipher implements ICipher {
+	private alphabets: string[] = [
+		'A', 'B', 'C', 'D', 'E', 'F',
+		'G', 'H', 'I', 'J', 'K', 'L',
+		'M', 'N', 'O', 'P', 'Q', 'R',
+		'S', 'T', 'U', 'V', 'W', 'X',
+		'Y', 'Z'
+	];
+
 	encrypt(plainText: string, key: number): string {
 		const encrypted: string[] = [];
 
 		for (let i = 0; i < plainText.length; i++) {
-			let charCode: number = plainText.charCodeAt(i),
-				shiftedCharCode: number = mod(charCode - 65 + key, 26) + 65,//ZYJJMML
-				encryptedChar: string = String.fromCharCode(shiftedCharCode);
+			let charPos = this.alphabets.indexOf(plainText[i]),
+				shiftedPos = mod(charPos + key, 26);
 
+			let encryptedChar = this.alphabets[shiftedPos];
 			encrypted.push(encryptedChar);
 		}
 
@@ -23,10 +31,10 @@ class CaesarCipher implements ICipher {
 		const decrypted: string[] = [];
 
 		for (let i = 0; i < cipherText.length; i++) {
-			let charCode: number = cipherText.charCodeAt(i),
-				shiftedCharCode: number = mod(charCode - 65 - key, 26) + 65,
-				decryptedChar: string = String.fromCharCode(shiftedCharCode);
+			let charPos = this.alphabets.indexOf(cipherText[i]),
+				shiftedPos = mod(charPos - key, 26);
 
+			let decryptedChar = this.alphabets[shiftedPos];
 			decrypted.push(decryptedChar);
 		}
 

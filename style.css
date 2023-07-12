@@ -2,7 +2,7 @@
 
 /* CSS VARIABLES */
 :root {
-	--text: #f6f9fe;
+	--text: #f6f9fe;	
 	--background: #061023;
 	--primary: #e9c57c;
 	--secondary: #091a39;
@@ -13,22 +13,20 @@
     --cyberpunk-clip-path: polygon(0 50%, 15% 0, 100% 0%, 100% 50%, 85% 100%, 0% 100%);
 }
 
-body {
-	background-color: var(--background);
+body {	
+    background-color: var(--background);
     color: var(--text);
     font-family: var(--font); 
 }
 
+.nav.nav-tabs .nav-link.active{
+    border-radius: 0;
+    background-color: var(--primary) !important;
+    color: var(--background) !important;
+}
+
 #section-decryption{
     margin-top: 6rem !important;
-}
-
-.txt-number, .textarea-input{    
-    height: 10rem;
-}
-
-.textarea-input{           
-    resize: none;
 }
 
 /* CYBERPUNK BUTTON */
@@ -36,7 +34,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;    
-    width: 9rem;
+    width: 10rem;
     height: 2.5rem;
     text-transform: uppercase;
     text-decoration: none;
