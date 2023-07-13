@@ -24,9 +24,7 @@ btnPlayfairEncrypt.addEventListener("click", () => {
 
     const playfairSquare = playfairCipher.playfairSquare;
     let cipherText = playfairCipher.encrypt(plainText, key);
-    
-    playfairSquare.forEach(row => (res.innerHTML += `[${row}] <br />`));
-        
+                
     let playfairSquareHTML = "";    
     for (let i = 0; i < playfairSquare.length; i++) {
         playfairSquareHTML += '<div class="row gx-1 justify-content-center">';

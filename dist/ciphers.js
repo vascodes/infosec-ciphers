@@ -185,12 +185,14 @@ class PlayfairCipher {
         return encryptedDigraphs.join("");
     }
     decrypt(cipherText, key) {
+        cipherText = cipherText.toUpperCase();
+        cipherText = cipherText.replace(/[\s\d\W]+/gi, ""); // Remove non alphabetic characters in plaintext.
         const digraphs = this.getDigraphs(cipherText);
         this.fillPlayfairSquare(key);
         // Decryption.
         const decryptedDigraphs = [];
         digraphs.forEach(digraph => decryptedDigraphs.push(this.getDigraphSubstitute(digraph, true)));
-        return decryptedDigraphs.join("");
+        return decryptedDigraphs.join("").replaceAll(this.fillerChar, "");
     }
 }
 export const caesarCipher = new CaesarCipher();

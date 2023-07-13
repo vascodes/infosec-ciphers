@@ -240,6 +240,9 @@ class PlayfairCipher {
 	}
 
 	decrypt(cipherText: string, key: string): string {
+		cipherText = cipherText.toUpperCase();		
+		cipherText = cipherText.replace(/[\s\d\W]+/gi, ""); // Remove non alphabetic characters in plaintext.
+		
 		const digraphs: string[] = this.getDigraphs(cipherText);
 		this.fillPlayfairSquare(key);
 
@@ -248,8 +251,8 @@ class PlayfairCipher {
 		digraphs.forEach(digraph =>
 			decryptedDigraphs.push(this.getDigraphSubstitute(digraph, true)),
 		);
-
-		return decryptedDigraphs.join("");
+		
+		return decryptedDigraphs.join("").replaceAll(this.fillerChar, "");
 	}
 }
 
