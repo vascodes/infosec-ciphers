@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InfoSec - Ciphers</title>
-    <script type="module" src="playfair.js"></script>
+    <script type="module" src="playfair.js" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
@@ -15,7 +15,6 @@
 </head>
 
 <body class="mx-lg-5">
-
     <div class="container p-0">
         <!-- NAVBAR -->
         <nav class="navbar navbar-expand-lg mb-3" data-bs-theme="dark">
@@ -29,10 +28,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item mx-auto mx-lg-5">
-                            <a class="nav-link active" aria-current="page" href="index.html">playfair Cipher</a>
+                            <a class="nav-link" aria-current="page" href="index.html">Caesar Cipher</a>
                         </li>
                         <li class="nav-item mx-auto">
-                            <a class="nav-link" href="playfair.html">Playfair Cipher</a>
+                            <a class="nav-link active" href="playfair.html">Playfair Cipher</a>
                         </li>
                 </div>
             </div>
@@ -75,11 +74,47 @@
                                 id="playfair-plaintext"></textarea>
                         </div>
 
-                        <div>
+                        <div class="mb-5">
                             <label for="playfair-encrypt-key" class="form-label">Key</label>
                             <input type="text"
                                 class="form-control bg-transparent text-white border-warning-subtle rounded-0"
                                 id="playfair-encrypt-key">
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="text-center">
+                                <a class="text-white" data-bs-toggle="collapse" href="#collapsePlayfairEncryptOptions"
+                                    role="button" aria-expanded="false" aria-controls="collapsePlayfairEncryptOptions">
+                                    Toggle Options
+                                </a>
+                            </p>
+                            <div class="collapse text-center" id="collapsePlayfairEncryptOptions">
+                                <div class="card card-body bg-transparent rounded-0 border-warning-subtle">
+                                    <div class="mb-4">
+                                        <label for="playfair-encrypt-filler" class="form-label">Filler Character</label>
+                                        <select class="p-2" id="playfair-encrypt-filler" data-bs-theme="dark"
+                                            aria-label="Select filler character">
+
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <p>
+                                            Replace
+                                            <select class="p-2" id="playfair-encrypt-replace-char" data-bs-theme="dark"
+                                                aria-label="Select filler character">                                                
+
+                                            </select>
+                                            With
+                                            <select class="p-2" id="playfair-encrypt-replacing-char"
+                                                data-bs-theme="dark" aria-label="Select filler character">
+
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -105,11 +140,46 @@
                                 id="playfair-ciphertext"></textarea>
                         </div>
 
-                        <div>
+                        <div class="mb-5">
                             <label for="playfair-decrypt-key" class="form-label">Key</label>
                             <input type="text"
                                 class="form-control bg-transparent text-white border-warning-subtle rounded-0"
                                 id="playfair-decrypt-key">
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="text-center">
+                                <a class="text-white" data-bs-toggle="collapse" href="#collapsePlayfairDecryptOptions"
+                                    role="button" aria-expanded="false" aria-controls="collapsePlayfairDecryptOptions">
+                                    Show Options
+                                </a>
+                            </p>
+                            <div class="collapse text-center" id="collapsePlayfairDecryptOptions">
+                                <div class="card card-body bg-transparent rounded-0 border-warning-subtle">
+                                    <div class="mb-4">
+                                        <label for="playfair-decrypt-filler" class="form-label">Filler Character</label>
+                                        <select class="p-2" id="playfair-decrypt-filler" data-bs-theme="dark"
+                                            aria-label="Select filler character">                                            
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <p>
+                                            Replace
+                                            <select class="p-2" id="playfair-decrypt-replace-char" data-bs-theme="dark"
+                                                aria-label="Select filler character">
+                                                
+                                            </select>
+                                            With
+                                            <select class="p-2" id="playfair-decrypt-replacing-char"
+                                                data-bs-theme="dark" aria-label="Select filler character">
+                                                
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
